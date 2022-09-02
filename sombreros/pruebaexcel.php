@@ -10,20 +10,6 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 $spreadsheet = new Spreadsheet();
 $sheet = $spreadsheet->getActiveSheet();
 
-$styleArray = [
-   
-    'alignment' => [
-        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
-    ],
-    
-    'borders' => [
-        'allborder' => [
-            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-        ],
-    ],
-
-];
-
 // FORMATO
 $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(15);
 $spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(45);
@@ -37,45 +23,15 @@ $spreadsheet->getActiveSheet()->getColumnDimension('J')->setWidth(15);
 $spreadsheet->getActiveSheet()->getColumnDimension('K')->setWidth(15);
 $spreadsheet->getActiveSheet()->getStyle('D3:D300')->getNumberFormat()
     ->setFormatCode('#,##0.00');
-    
-$spreadsheet->getActiveSheet()->getStyle('A1:k9')->applyFromArray($styleArray);    
 
     $spreadsheet->getDefaultStyle()->getFont()->setName('Arial');
-    $spreadsheet->getDefaultStyle()->getFont()->setSize(12);
+    $spreadsheet->getDefaultStyle()->getFont()->setSize(8);
 //$spreadsheet->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
 
 
-// Fechas de las 2 semanas 
-
-$fecha1= '04-07-2022';  // SEMANA 1
-$fecha2= '08-07-2022'; 
-
-$fecha3= '11-07-2022';  // SEMANA 2
-$fecha4= '15-07-2022';
-
-
-
-//A1-L1
-
-$mesDato1 = mesPalabra($fecha1);
-$mesDato2 = mesPalabra($fecha2);
-$fechaDato1 = diaNum($fecha1);
-$fechaDato2 = diaNum($fecha2);
-$year = date("Y", strtotime($fecha1));
-
-$titulo = "PAGO DEL $fechaDato1 DE $mesDato1 AL $fechaDato2 DE $mesDato2 DEL $year";
-
-$mesDato1 = mesPalabra($fecha3);
-$mesDato2 = mesPalabra($fecha4);
-$fechaDato1 = diaNum($fecha3);
-$fechaDato2 = diaNum($fecha4);
-$year = date("Y", strtotime($fecha4));
-
-$titulo2 = "PAGO DEL $fechaDato1 DE $mesDato1 AL $fechaDato2 DE $mesDato2 DEL $year";
-
 $sheet->setTitle("nombre de la hoja");
-$sheet->setCellValue('C1', $titulo);
-$sheet->setCellValue('D1', $titulo2);
+
+$sheet->setCellValue('C1','PAGO SEMANAL DEL 23 DE JULIO AL 06 DE AGOSTO');
 $sheet->setCellValue('D2','SUELDO 1 4%');
 $sheet->setCellValue('E2','BONIF 1 5%');
 $sheet->setCellValue('F2','SUELDO 2 4%');
@@ -93,16 +49,21 @@ $sheet->setCellValue('C2','NOMBRE');
 // $fecha1 =  $_POST["date1"];
 // $fecha2 =  $_POST["date2"];
 
-//Fechas Formateadas
+
+// Fechas de las 2 semanas 
+
+$fecha1= '04-07-2022';  // SEMANA 1
+$fecha2= '08-07-2022'; 
+
 $fechainiSEM1 = date("Y-m-d", strtotime($fecha1) );
 $fechafinSEM1 = date("Y-m-d", strtotime($fecha2) );
+
+
+$fecha3= '11-07-2022';  // SEMANA 2
+$fecha4= '15-07-2022';
+
 $fechainiSEM2 = date("Y-m-d", strtotime($fecha3) );
 $fechafinSEM2 = date("Y-m-d", strtotime($fecha4) );
-
-
-
-
-
 //////// CONEXION A LA BASE DE DATOS //////////////
 $con=mysqli_connect("localhost","root","","sombrerosoficina");
 // Check connection
@@ -156,6 +117,9 @@ $filacon = 3;
 $idemp= array();
 $nombreemp = array();
 $apellidoemp = array();
+echo 'idempleadoarray[0] es _ ' . $idempleadoarray[0];
+
+
 
 
 
@@ -164,10 +128,10 @@ $totalemp= array();
 $filaB = 3;
 for ($id = 1 ; $id <= $idempleadoarray[0]; $id++) {
    
-    $sql5 = "SELECT idempleado_prod, nombreempleado, apellidoempleado, SUM(importe) FROM produccion 
+    $sql5 = "SELECT idempleado_prod, nombreempleado, SUM(importe) FROM produccion 
     where idempleado_prod = " .$id. " AND fechaprod >= '" .$fechainiSEM1 . "' AND fechaprod <= '" .$fechafinSEM1 . "' ";
     
-    $sql6 = "SELECT idempleado_prod, nombreempleado, apellidoempleado, SUM(importe) FROM produccion 
+    $sql6 = "SELECT idempleado_prod, nombreempleado, SUM(importe) FROM produccion 
     where idempleado_prod = " .$id. " AND fechaprod >= '" .$fechainiSEM2 . "' AND fechaprod <= '" .$fechafinSEM2 . "' ";
 
     //Inserta datos de acuerdo a la consulta sql5
@@ -179,38 +143,96 @@ for ($id = 1 ; $id <= $idempleadoarray[0]; $id++) {
 
 
 
- $noconse = 1;
- $nofila = 3;
 
 
-  $sql7 = "SELECT idempleado, nombre, sueldo1, bon1, sueldo2, bon2
-  FROM pagosemanal order by nombre ";
 
-  if (!$result = $con->query($sql7)) {
-     die('There was an error running the query [' . $db->error . ']');
- }
 
- while ($row = $result->fetch_assoc()) {
+// $noconse = 1;
+// $nofila = 3;
+//  $sql6 = "SELECT idempleado_prod, nombreempleado, apellidoempleado, SUM(importe) as importe FROM produccion GROUP BY nombreempleado order by nombreempleado ";
+//  if (!$result = $con->query($sql5)) {
+//     die('There was an error running the query [' . $db->error . ']');
+// }
+
+// while ($row = $result->fetch_assoc()) {
+//     $totalemp[$id] = $row['SUM(importe)'];
 //  //   $sheet->setCellValue('B'.$filaB, 'empleado no: '. $id  . ' sum importe ' . $totalemp[$id]);
-    $sheet->setCellValue('A'.$nofila, $noconse);
-    $sheet->setCellValue('B'.$nofila, "id EMP : " .  $row['idempleado']);
-    $sheet->setCellValue('C'.$nofila, $row['nombre'] ); 
-    $sheet->setCellValue('D'.$nofila, $row['sueldo1'] );
-    $sheet->setCellValue('E'.$nofila, $row['bon1']  );
-    $sheet->setCellValue('F'.$nofila, $row['sueldo2'] );
-    $sheet->setCellValue('G'.$nofila, $row['bon2']  );
-    echo 'empleado no: '. $row['nombre']  . '';
-    $nofila++;
-    $noconse++;
-}
+//     $sheet->setCellValue('A'.$nofila, $noconse);
+//     $sheet->setCellValue('B'.$nofila, "id EMP : " .  $row['idempleado_prod']);
+//     $sheet->setCellValue('C'.$nofila, $row['nombreempleado'] . " " . $row['apellidoempleado']);
+//     $sheet->setCellValue('D'.$nofila, $row['SUM(importe)'] );
+//     $sheet->setCellValue('E'.$nofila, $row['SUM(importe)'] * 0.05 );
+//     $sheet->setCellValue('F'.$nofila, $row['SUM(importe)'] );
+//     $sheet->setCellValue('G'.$nofila, $row['SUM(importe)'] * 0.05 );
+//     echo 'empleado no: '. $id  . 'sum importe ' . $totalemp[$id];
+//     $nofila++;
+//     $noconse++;
+// }
 
 
-$fileName = 'PAGO.xlsx';
-ob_clean();
+// $sql = "select idproduccion, nombreempleado, cant from produccion";
+// echo $sql;
+//  $resultado = $mysqli->$query('select * from produccion');
+
+
+
+
+
+// $hojaActiva->setTitle("titulo");
+
+ 
+
+// $fila = 2;
+
+// // while( $rows = $resultado->fetch_assoc() ){
+// //     $hojaActiva->setCellValue('A'.$fila, $rows['idproduccion']);
+// //     $hojaActiva->setCellValue('A'.$fila, $rows['nombreempleado']);
+// //     $hojaActiva->setCellValue('A'.$fila, $rows['cant']);
+// //     $fila++;
+
+// // }
+
+// // header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+// // header('Content-Disposition: attachment;filename="myfile.xlsx"');
+// // header('Cache-Control: max-age=0');
+
+// // $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
+// // $writer->save('php://output');
+
+
+// //$spreadsheet = new Spreadsheet();
+// //$sheet = $spreadsheet->getActiveSheet();
+// //$sheet->setCellValue('A1', 'Hello World !');
+
+// // $writer = new Xlsx($excel);
+// // $writer->save('hello world.xlsx');
+
+// header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+// header('Content-Disposition: attachment;filename="myfile.xlsx"');
+// header('Cache-Control: max-age=0');
+
+// $writer =IOFactory::createWriter($spreadsheet, 'Xlsx');
+// $writer->save('php://output');
+
+
 $writer = new Xlsx($spreadsheet);
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="'. urlencode($fileName).'"');
-        $writer->save('php://output');
+$writer->save('hello world.xlsx');
+//mysqli_close($con);
+
+// header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+// header('Content-Disposition: attachment;filename="Ejemplo Excel.xlsx"');
+// header('Cache-Control: max-age=0');
+
+// $writer =IOFactory::createWriter($spreadsheet, 'Xlsx');
+// $writer->save('php://output');
+
+// redirect output to client browser
+// header('Content-Type: application/vnd.ms-excel');
+// header('Content-Disposition: attachment;filename="myfile.xls"');
+// header('Cache-Control: max-age=0');
+
+// $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xls');
+// $writer->save('php://output');
 
 
 
@@ -230,10 +252,10 @@ function insertarDatos($sql5, $con){
 
 
         if( !is_null( $row['idempleado_prod'])  and !is_null($row['nombreempleado'])){
-           
+            echo " --->  " .$row["idempleado_prod"]. " / " .$row["nombreempleado"]. " * ".$row["SUM(importe)"];
                 $queryInsert = "INSERT INTO pagosemanal SET
                         idempleado = " .$row["idempleado_prod"]. ",
-                        nombre = '" .$row["nombreempleado"]. " " .$row["apellidoempleado"]."',
+                        nombre = '" .$row["nombreempleado"]. "',
                         sueldo1 = " .$row["SUM(importe)"]. ",
                         bon1 = " .(5 / 100) * $row["SUM(importe)"]. ",
                         sueldo2 = 0.0,
@@ -256,43 +278,11 @@ function updateDatos($sql6, $con, $id){
      
 
         if( !is_null( $row['idempleado_prod'])  and !is_null($row['nombreempleado'])){
-            
+            echo " --->  " .$row["idempleado_prod"]. " / " .$row["nombreempleado"]. " * ".$row["SUM(importe)"];
                 $queryUpdate = "UPDATE pagosemanal SET
                         sueldo2 = " .$row['SUM(importe)']. " ,
                         bon2 = " .(5 / 100) * $row["SUM(importe)"]. " WHERE idempleado = " .$id.  " ";
                 $update = mysqli_query($con, $queryUpdate);
         }
     }    
-}
-
-function mesPalabra($fecha){
-
-    $meses = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];
-    
-    $mesDato1 = date("m", strtotime($fecha) );
-   
-
-    for ($id = 1 ; $id <= 12; $id++) {
-    
-        if($mesDato1 == $id ){
-            $mesD1 = $meses[$id - 1];
-            echo " MES DATO " .$mesDato1;
-        }
-       
-    
-    }
-    echo " -mes- " .$mesD1;
-
-    return $mesD1;
-
-}
-
-
-function diaNum($fecha){
-
-    
-    $dia = date("d", strtotime($fecha) );
-    echo " -DIA- " .$dia;
-    return $dia;
-
 }
