@@ -7,41 +7,122 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
+
+global $spreadsheet;
 $spreadsheet = new Spreadsheet();
 $sheet = $spreadsheet->getActiveSheet();
 
 $styleArray = [
-   
-    'alignment' => [
-        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
-    ],
+    
     
     'borders' => [
-        'allborder' => [
+        'allBorders' => [
             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+            'color' => ['argb' => '000000'],
         ],
+    ],
+
+    'alignment' => [
+        'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+    ],
+
+];
+
+$centrar = [
+    
+    
+    'alignment' => [
+        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+        //'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+    ],
+
+];
+
+
+$bold = [
+    'font' => [
+        'bold' => true,
+    ],
+];
+
+$relleno = [
+    'fill' => [
+        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+        'color' => ['argb' => 'C6E0B4'],
+    ],
+
+];
+
+$rellenoColumn = [
+    'fill' => [
+        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+        'color' => ['argb' => '99E5FF'],
+    ],
+
+];
+
+$rellenoFila = [
+    'fill' => [
+        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+        'color' => ['rgb' => '9BC2E6'],
     ],
 
 ];
 
 // FORMATO
-$spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(15);
-$spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(45);
-$spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(15);
-$spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(15);
-$spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(15);
-$spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(15);
-$spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(15);
-$spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(15);
-$spreadsheet->getActiveSheet()->getColumnDimension('J')->setWidth(15);
-$spreadsheet->getActiveSheet()->getColumnDimension('K')->setWidth(15);
+$spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(3);
+$spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(8);
+$spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(35);
+
+$spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(14);
+$spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(11);
+$spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(14);
+$spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(11);
+
+$spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(10);
+$spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(10);
+$spreadsheet->getActiveSheet()->getColumnDimension('J')->setWidth(10);
+$spreadsheet->getActiveSheet()->getColumnDimension('K')->setWidth(10);
+$spreadsheet->getActiveSheet()->getColumnDimension('L')->setWidth(12);
+
+
+//COMBINA CELDAS
+$spreadsheet->getActiveSheet()->mergeCells('A1:L1');
+
+//ESTABLECER FUENTE
+$spreadsheet->getDefaultStyle()->getFont()->setName('Arial');
+    $spreadsheet->getDefaultStyle()->getFont()->setSize(12);
+
+
+//ALTURA PREDETERMINADA
+$spreadsheet->getActiveSheet()->getDefaultRowDimension('A1:L38')->setRowHeight(21);
+
+//Altura FILA
+//$spreadsheet->getActiveSheet()->getRowDimension('2')->setRowHeight(30);
+
 $spreadsheet->getActiveSheet()->getStyle('D3:D300')->getNumberFormat()
     ->setFormatCode('#,##0.00');
     
-$spreadsheet->getActiveSheet()->getStyle('A1:k9')->applyFromArray($styleArray);    
+//Color Relleno columnas 
+$spreadsheet->getActiveSheet()->getStyle('F3:F38')->applyFromArray($rellenoColumn);
+$spreadsheet->getActiveSheet()->getStyle('D3:D38')->applyFromArray($relleno); 
+//Relleno FIla
+$spreadsheet->getActiveSheet()->getStyle('D2:G2')->applyFromArray($rellenoFila);
+  
+//Borde de celdas
+$spreadsheet->getActiveSheet()->getStyle('A1:L38')->applyFromArray($styleArray); 
+//Fuente bol
+$spreadsheet->getActiveSheet()->getStyle('D2:L2')->applyFromArray($bold);   
 
-    $spreadsheet->getDefaultStyle()->getFont()->setName('Arial');
-    $spreadsheet->getDefaultStyle()->getFont()->setSize(12);
+//Centrar Titulo
+$spreadsheet->getActiveSheet()->getStyle('A1')->applyFromArray($centrar);
+$spreadsheet->getActiveSheet()->getStyle('D3:H38')->applyFromArray($centrar); 
+
+
+
+
+
+    
 //$spreadsheet->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
 
 
@@ -73,9 +154,9 @@ $year = date("Y", strtotime($fecha4));
 
 $titulo2 = "PAGO DEL $fechaDato1 DE $mesDato1 AL $fechaDato2 DE $mesDato2 DEL $year";
 
-$sheet->setTitle("nombre de la hoja");
-$sheet->setCellValue('C1', $titulo);
-$sheet->setCellValue('D1', $titulo2);
+$sheet->setTitle("PAGO");
+$sheet->setCellValue('A1', $titulo. " - " .$titulo2);
+//$sheet->setCellValue('D1', $titulo2);
 $sheet->setCellValue('D2','SUELDO 1 4%');
 $sheet->setCellValue('E2','BONIF 1 5%');
 $sheet->setCellValue('F2','SUELDO 2 4%');
@@ -84,10 +165,13 @@ $sheet->setCellValue('H2','TOTAL');
 $sheet->setCellValue('I2','DESC. PTO');
 $sheet->setCellValue('J2','OTROS');
 $sheet->setCellValue('K2','PAGO');
+$sheet->setCellValue('L2','SALDO PTO.');
 
 $sheet->setCellValue('A2','NO.');
 $sheet->setCellValue('B2','NO. EMP');
 $sheet->setCellValue('C2','NOMBRE');
+
+
 
 
 // $fecha1 =  $_POST["date1"];
@@ -184,7 +268,7 @@ for ($id = 1 ; $id <= $idempleadoarray[0]; $id++) {
 
 
   $sql7 = "SELECT idempleado, nombre, sueldo1, bon1, sueldo2, bon2
-  FROM pagosemanal order by nombre ";
+  FROM pagosemanal order by nombre ASC ";
 
   if (!$result = $con->query($sql7)) {
      die('There was an error running the query [' . $db->error . ']');
@@ -193,12 +277,13 @@ for ($id = 1 ; $id <= $idempleadoarray[0]; $id++) {
  while ($row = $result->fetch_assoc()) {
 //  //   $sheet->setCellValue('B'.$filaB, 'empleado no: '. $id  . ' sum importe ' . $totalemp[$id]);
     $sheet->setCellValue('A'.$nofila, $noconse);
-    $sheet->setCellValue('B'.$nofila, "id EMP : " .  $row['idempleado']);
-    $sheet->setCellValue('C'.$nofila, $row['nombre'] ); 
-    $sheet->setCellValue('D'.$nofila, $row['sueldo1'] );
-    $sheet->setCellValue('E'.$nofila, $row['bon1']  );
-    $sheet->setCellValue('F'.$nofila, $row['sueldo2'] );
-    $sheet->setCellValue('G'.$nofila, $row['bon2']  );
+    $sheet->setCellValue('B'.$nofila, $row['idempleado']);
+    $sheet->setCellValue('C'.$nofila, strtoupper($row['nombre']) ); 
+    $sheet->setCellValue('D'.$nofila, "$".$row['sueldo1'] );
+    $sheet->setCellValue('E'.$nofila, "$".$row['bon1']  );
+    $sheet->setCellValue('F'.$nofila, "$".$row['sueldo2'] );
+    $sheet->setCellValue('G'.$nofila, "$".$row['bon2']  );
+    $sheet->setCellValue('H'.$nofila, "$".($row['sueldo1'] +  $row['bon1']  +  $row['sueldo2'] + $row['bon2']) );
     echo 'empleado no: '. $row['nombre']  . '';
     $nofila++;
     $noconse++;
