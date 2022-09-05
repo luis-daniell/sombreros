@@ -103,6 +103,7 @@ $spreadsheet->getActiveSheet()->getDefaultRowDimension('A1:L38')->setRowHeight(2
 $spreadsheet->getActiveSheet()->getStyle('D3:D300')->getNumberFormat()
     ->setFormatCode('#,##0.00');
     
+    
 //Color Relleno columnas 
 $spreadsheet->getActiveSheet()->getStyle('F3:F38')->applyFromArray($rellenoColumn);
 $spreadsheet->getActiveSheet()->getStyle('D3:D38')->applyFromArray($relleno); 
