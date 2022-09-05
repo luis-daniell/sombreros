@@ -1,4 +1,5 @@
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>Reportes</title>
@@ -8,9 +9,9 @@
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <link rel="stylesheet" href="/resources/demos/style.css">
     <script>
-        $(function() {
-            $( "#datepicker" ).datepicker();
-        });
+    $(function() {
+        $("#datepicker").datepicker();
+    });
     </script>
 
     <!-- EST ES DE: http://stackoverflow.com/questions/4332379/simple-datepicker-like-calendar -->
@@ -20,12 +21,12 @@
 
 <body>
 
-<h1>Reportes de trabajos realizados</h1>
-<br>
-<br>
-<p> Aquí se generarán los reportes de trabajos</p>
-<br>
-<?php
+    <h1>Reportes de trabajos realizados</h1>
+    <br>
+    <br>
+    <p> Aquí se generarán los reportes de trabajos</p>
+    <br>
+    <?php
 //todo: resetear variables de fecha, o poner validacion
 //Se checa que el boton "generar" no se haya oprimido
 //cuando se presiona el boton, se ejecuta el codigo
@@ -38,25 +39,25 @@ if (isset($_POST['generar'])) {
 ?>
 
 
-<br>
-<!-- el action no tiene nombre de archivo, para que se ejecute
+    <br>
+    <!-- el action no tiene nombre de archivo, para que se ejecute
 aqui mismo -->
-<form action="" method="post">
-    <p> selecciona la fecha inicial:</p>
-      <!-- <p>Date: <input type="text" id="datepicker"></p> -->
-    <input type="text" name="date1" id="date1" alt="date" class="IP_calendar" title="d/m/Y">
-    <p> Selecciona la fecha final</p>
-    <!-- <p>Date2 <input type="text" id="datepicker"></p> -->
-    <input type="text" name="date2" id="date1" alt="date" class="IP_calendar" title="d/m/Y">
-    <br>
-    <input name="generar" type="submit">
-    <br>
-    <br>
-</form>
+    <form action="" method="post">
+        <p> selecciona la fecha inicial:</p>
+        <!-- <p>Date: <input type="text" id="datepicker"></p> -->
+        <input type="text" name="date1" id="date1" alt="date" class="IP_calendar" title="d/m/Y">
+        <p> Selecciona la fecha final</p>
+        <!-- <p>Date2 <input type="text" id="datepicker"></p> -->
+        <input type="text" name="date2" id="date1" alt="date" class="IP_calendar" title="d/m/Y">
+        <br>
+        <input name="generar" type="submit">
+        <br>
+        <br>
+    </form>
 
-<br>
-<br>
-<?php
+    <br>
+    <br>
+    <?php
     //Cambia de formato la fecha
     //Fecha inicial
     /* ejemplo
@@ -90,6 +91,7 @@ if (mysqli_connect_errno())
 {
     echo "Failed to connect to MySQL: " . mysqli_connect_error();
 }
+
 
 
 ////////// ID MAXIMO
