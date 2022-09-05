@@ -56,6 +56,10 @@ if (isset($_POST['generar'])) {
             <table class="table table-responsive" style="margin: 0 auto;">
 
 
+                <tr style="text-align:center;">
+                    SELECCIONE EL RANGO
+                </tr>
+
                 <tr>
 
                     <td colspan="2" style="text-align:center;">
@@ -80,16 +84,6 @@ if (isset($_POST['generar'])) {
                             title="dd/mm/yyyy"></td>
                 </tr>
 
-
-
-
-                <tr>
-
-                    <td>
-
-                    </td>
-
-                </tr>
 
 
 
