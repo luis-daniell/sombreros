@@ -49,81 +49,111 @@ if (isset($_POST['generar'])) {
     echo"<br>";
     $fecha4 = $_POST['fecha4'];
     //echo $example . " " . $example2;
+    //header('Location: fechas.php'); 
+    
 }
+
+
 ?>
     <div style="text-align:center;">
         <form action="pruebaexcel.php" id="TablaFechas" method="POST" role="form">
-            <table class="table table-responsive" style="margin: 0 auto;">
+            <div>
 
 
-                <tr style="text-align:center;">
-                    SELECCIONE EL RANGO
-                </tr>
+                <div class="d-flex justify-content-center">
+                    <p id="textoh3">SELECCIONE EL RANGO</p>
 
-                <tr>
 
-                    <td colspan="2" style="text-align:center;">
-                        SEMANA 1
-                    </td>
-                </tr>
+                    <div>
 
-                <tr>
+                        <div style="text-align:center;">
+                            <p id="textoh3">SEMANA 1</p>
+                        </div>
+                    </div>
 
-                    <td>
-                        Fecha Inicial
-                    </td>
+                    <div style="display: flex; align-items: center;
+    justify-content: center;">
 
-                    <td>Fecha Final</td>
-                </tr>
+                        <div>
+                            <p id="textoh3">FECHA INICIAL</p>
+                        </div>
 
-                <tr>
-                    <td><input type="date" name="fecha1" id="input" class="form-control" required="required"
-                            title="dd/mm/yyyy"></td>
+                        <div style="margin-left:50px;">
+                            <p id="textoh3">FECHA FINAL</p>
+                        </div>
+                    </div>
 
-                    <td><input type="date" name="fecha2" id="input" class="form-control" required="required"
-                            title="dd/mm/yyyy"></td>
-                </tr>
+                </div>
 
 
 
-
-                <tr>
-                    <br />
-
-                    <td style="text-align:center;" colspan="2" class="h-75">
-                        SEMANA 2
-                    </td>
-
-                </tr>
-
-                <tr>
+                <div style="display: flex; align-items: center;
+    justify-content: center;">
+                    <div><input type="date" name="fecha1" id="input" class="form-control" required="required"
+                            title="dd/mm/yyyy"></div>
 
 
-                    <td>
-                        Fecha Inicial
-                    </td>
-
-                    <td>Fecha Final</td>
-                </tr>
-
-
-                <tr>
-                    <td><input type="date" name="fecha3" id="input" class="form-control" required="required"
-                            title="dd/mm/yyyy"></td>
-
-                    <td><input type="date" name="fecha4" id="input" class="form-control" required="required"
-                            title="dd/mm/yyyy"></td>
-                </tr>
+                    <div style="margin-left:50px;">
+                        <input type="date" name="fecha2" id="input" class="form-control" required="required"
+                            title="dd/mm/yyyy">
+                    </div>
+                </div>
 
 
 
 
 
-            </table>
+
+                <div style="margin-top:40px; ">
+
+                    <div style="text-align:center; ">
+                        <p id="textoh3">SEMANA 2 </p>
+                    </div>
+
+
+
+
+                    <div style="display: flex; align-items: center;
+    justify-content: center;">
+
+
+                        <div>
+                            <p id="textoh3">FECHA INICIAL</p>
+                        </div>
+
+                        <div style="margin-left:50px;">
+                            <p id="textoh3">FECHA FINAL</p>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+                <div style="display: flex; align-items: center;
+    justify-content: center;">
+                    <div><input type="date" name="fecha3" id="input" class="form-control" required="required"
+                            title="dd/mm/yyyy"></div>
+                    <!-- <td>
+                        -
+                    </td> -->
+
+                    <div style="margin-left:50px;">
+                        <input type="date" name="fecha4" id="input" class="form-control" required="required"
+                            title="dd/mm/yyyy">
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
 
             <br>
 
-            <button type="submit" class="btn btn-primary ">Enviar</button>
+            <button type="submit" class="btn btn-primary " style="margin-top: 10px ;">Enviar</button>
 
 
         </form>
@@ -143,3 +173,22 @@ aqui mismo -->
 </body>
 
 </html>
+
+<!-- <script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function() {
+    let formulario = document.getElementById('TablaFechas');
+    formulario.addEventListener('submit', function() {
+        formulario.reset();
+    });
+});
+
+function resetear(){
+    
+}
+
+// document.getElementById('envio-datos')
+//     .addEventListener('submit', () => {
+//         
+
+//     })
+</script> -->

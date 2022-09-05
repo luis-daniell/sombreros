@@ -113,7 +113,7 @@ $spreadsheet->getActiveSheet()->getDefaultRowDimension('A1:L38')->setRowHeight(2
 //Altura FILA
 //$spreadsheet->getActiveSheet()->getRowDimension('2')->setRowHeight(30);
 
-$spreadsheet->getActiveSheet()->getStyle('D3:D300')->getNumberFormat()
+$spreadsheet->getActiveSheet()->getStyle('D3:H38')->getNumberFormat()
     ->setFormatCode('#,##0.00');
     
     
@@ -146,24 +146,25 @@ $spreadsheet->getActiveSheet()->getStyle('D3:H38')->applyFromArray($centrar);
 
 //A1-L1
 
-$mesDato1 = mesPalabra($fecha1);
-$mesDato2 = mesPalabra($fecha2);
-$fechaDato1 = diaNum($fecha1);
-$fechaDato2 = diaNum($fecha2);
-$year = date("Y", strtotime($fecha1));
+$mes1Dato1 = mesPalabra($fecha1);
+$mes1Dato2 = mesPalabra($fecha2);
+$fecha1Dato1 = diaNum($fecha1);
+$fecha1Dato2 = diaNum($fecha2);
+$year1 = date("Y", strtotime($fecha1));
 
-$titulo = "PAGO DEL $fechaDato1 DE $mesDato1 AL $fechaDato2 DE $mesDato2 DEL $year";
 
-$mesDato1 = mesPalabra($fecha3);
-$mesDato2 = mesPalabra($fecha4);
-$fechaDato1 = diaNum($fecha3);
-$fechaDato2 = diaNum($fecha4);
-$year = date("Y", strtotime($fecha4));
+$mes2Dato1 = mesPalabra($fecha3);
+$mes2Dato2 = mesPalabra($fecha4);
+$fecha2Dato1 = diaNum($fecha3);
+$fecha2Dato2 = diaNum($fecha4);
+$year2 = date("Y", strtotime($fecha4));
 
-$titulo2 = "PAGO DEL $fechaDato1 DE $mesDato1 AL $fechaDato2 DE $mesDato2 DEL $year";
+
+$titulo = "PAGO DEL $fecha1Dato1 DE $mes1Dato1 AL $fecha2Dato2 DE $mes2Dato2";
+
 
 $sheet->setTitle("PAGO");
-$sheet->setCellValue('A1', $titulo. " - " .$titulo2);
+$sheet->setCellValue('A1', $titulo);
 //$sheet->setCellValue('D1', $titulo2);
 $sheet->setCellValue('D2','SUELDO 1 4%');
 $sheet->setCellValue('E2','BONIF 1 5%');
@@ -298,15 +299,14 @@ for ($id = 1 ; $id <= $idempleadoarray[0]; $id++) {
 }
 
 
-$fileName = 'PAGO.xlsx';
+$fileName = 'PAGO DEL '.$fecha1Dato1.' DE '.$mes1Dato1. ' AL ' .$fecha2Dato2.' DE '.$mes2Dato2.'.xlsx';
 ob_clean();
 $writer = new Xlsx($spreadsheet);
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="'. urlencode($fileName).'"');
+        header('Content-Disposition: attachment; filename="'. $fileName.'"');
         $writer->save('php://output');
 
-
-
+        
 
 /**
  * FUNCIONES
