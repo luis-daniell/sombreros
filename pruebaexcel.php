@@ -8,9 +8,22 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
+
+
+// Fechas de las 2 semanas 
+
+$fecha1= $_POST["fecha1"];  // '04-07-2022'
+$fecha2= $_POST["fecha2"]; //'08-07-2022'
+
+$fecha3= $_POST["fecha3"];  // '11-07-2022'
+$fecha4= $_POST["fecha4"]; //'15-07-2022'
+
+
+
 global $spreadsheet;
 $spreadsheet = new Spreadsheet();
 $sheet = $spreadsheet->getActiveSheet();
+
 
 $styleArray = [
     
@@ -126,13 +139,7 @@ $spreadsheet->getActiveSheet()->getStyle('D3:H38')->applyFromArray($centrar);
 //$spreadsheet->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
 
 
-// Fechas de las 2 semanas 
 
-$fecha1= '04-07-2022';  // SEMANA 1
-$fecha2= '08-07-2022'; 
-
-$fecha3= '11-07-2022';  // SEMANA 2
-$fecha4= '15-07-2022';
 
 
 
@@ -216,7 +223,7 @@ $result = mysqli_query($con, $sqlTabla);
 //echo ' resultao ' .$result; 1 si se hizo con exito
 
 
-////////// ID MAXIMO
+// ID MAXIMO
 $idempleadoarray = array();
 $sql2 = "SELECT MAX(idempleado_prod) FROM produccion";
 $resultado = mysqli_query($con, $sql2);

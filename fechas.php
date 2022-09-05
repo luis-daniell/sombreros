@@ -25,8 +25,7 @@
         <ul>
             <li><a href='index.html'><span>Inicio</span></a></li>
             <li><a href='importadatos.php'><span>Importar datos</span></a></li>
-            <li><a href='fechas.php'><span>Reportes</span></a></li>
-            <li class='active'><a href='reporteExcel.php'><span>Reporte Excel</span></a></li>
+            <li class='active'><a href='pruebaExcel.php'><span>Reportes</span></a></li>
             <!-- <li class='last'><a href='#'><span>Contact</span></a></li> -->
         </ul>
     </div>
