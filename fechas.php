@@ -25,7 +25,8 @@
         <ul>
             <li><a href='index.html'><span>Inicio</span></a></li>
             <li><a href='importadatos.php'><span>Importar datos</span></a></li>
-            <li class='active'><a href='fechas.php'><span>Reportes</span></a></li>
+            <li><a href='fechas.php'><span>Reportes</span></a></li>
+            <li class='active'><a href='reporteExcel.php'><span>Reporte Excel</span></a></li>
             <!-- <li class='last'><a href='#'><span>Contact</span></a></li> -->
         </ul>
     </div>
@@ -41,9 +42,13 @@
 //Se checa que el boton "generar" no se haya oprimido
 //cuando se presiona el boton, se ejecuta el codigo
 if (isset($_POST['generar'])) {
-    $fecha1 = $_POST['date1'];
+    $fecha1 = $_POST['fecha1'];
     echo"<br>";
-    $fecha2 = $_POST['date2'];
+    $fecha2 = $_POST['fecha2'];
+    echo"<br>";
+    $fecha3 = $_POST['fecha3'];
+    echo"<br>";
+    $fecha4 = $_POST['fecha4'];
     //echo $example . " " . $example2;
 }
 ?>
@@ -51,25 +56,83 @@ if (isset($_POST['generar'])) {
         <form action="pruebaexcel.php" id="TablaFechas" method="POST" role="form">
             <table class="table table-responsive" style="margin: 0 auto;">
 
+
                 <tr>
+
+                    <td colspan="2" style="text-align:center;">
+                        SEMANA 1
+                    </td>
+                </tr>
+
+                <tr>
+
                     <td>
                         Fecha Inicial
                     </td>
-                </tr>
-                <tr>
-                    <td><input type="date" name="date1" id="input" class="form-control" required="required"
-                            title="dd/mm/yyyy"></td>
-                </tr>
-                <tr>
+
                     <td>Fecha Final</td>
                 </tr>
+
                 <tr>
-                    <td><input type="date" name="date2" id="input" class="form-control" required="required"
+                    <td><input type="date" name="fecha1" id="input" class="form-control" required="required"
+                            title="dd/mm/yyyy"></td>
+
+                    <td><input type="date" name="fecha2" id="input" class="form-control" required="required"
                             title="dd/mm/yyyy"></td>
                 </tr>
+
+
+
+
+                <tr>
+
+                    <td>
+
+                    </td>
+
+                </tr>
+
+
+
+                <tr>
+                    <br />
+
+                    <td style="text-align:center;" colspan="2" class="h-75">
+                        SEMANA 2
+                    </td>
+
+                </tr>
+
+                <tr>
+
+
+                    <td>
+                        Fecha Inicial
+                    </td>
+
+                    <td>Fecha Final</td>
+                </tr>
+
+
+                <tr>
+                    <td><input type="date" name="fecha3" id="input" class="form-control" required="required"
+                            title="dd/mm/yyyy"></td>
+
+                    <td><input type="date" name="fecha4" id="input" class="form-control" required="required"
+                            title="dd/mm/yyyy"></td>
+                </tr>
+
+
+
+
+
             </table>
-            <br />
-            <button type="submit" class="btn btn-primary">Enviar</button>
+
+            <br>
+
+            <button type="submit" class="btn btn-primary ">Enviar</button>
+
+
         </form>
     </div>
 
