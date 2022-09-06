@@ -306,7 +306,7 @@ $writer = new Xlsx($spreadsheet);
         header('Content-Disposition: attachment; filename="'. $fileName.'"');
         $writer->save('php://output');
 
-        
+        //header( "refresh:5;url=index.html" );        
 
 /**
  * FUNCIONES
