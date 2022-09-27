@@ -12,11 +12,11 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 // Fechas de las 2 semanas 
 
-$fecha1= $_POST["fecha1"];  // '04-07-2022'
-$fecha2= $_POST["fecha2"]; //'08-07-2022'
+$fecha1= $_POST["fecha1"]; //'20-06-2022';//  // 
+$fecha2= $_POST["fecha2"]; //'24-06-2022';// //
 
-$fecha3= $_POST["fecha3"];  // '11-07-2022'
-$fecha4= $_POST["fecha4"]; //'15-07-2022'
+$fecha3= $_POST["fecha3"]; //'27-06-2022';//  // 
+$fecha4= $_POST["fecha4"]; //'01-07-2022';// //
 
 
 
@@ -25,62 +25,7 @@ $spreadsheet = new Spreadsheet();
 $sheet = $spreadsheet->getActiveSheet();
 
 
-$styleArray = [
-    
-    
-    'borders' => [
-        'allBorders' => [
-            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-            'color' => ['argb' => '000000'],
-        ],
-    ],
 
-    'alignment' => [
-        'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
-    ],
-
-];
-
-$centrar = [
-    
-    
-    'alignment' => [
-        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-        //'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
-    ],
-
-];
-
-
-$bold = [
-    'font' => [
-        'bold' => true,
-    ],
-];
-
-$relleno = [
-    'fill' => [
-        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-        'color' => ['argb' => 'C6E0B4'],
-    ],
-
-];
-
-$rellenoColumn = [
-    'fill' => [
-        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-        'color' => ['argb' => '99E5FF'],
-    ],
-
-];
-
-$rellenoFila = [
-    'fill' => [
-        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-        'color' => ['rgb' => '9BC2E6'],
-    ],
-
-];
 
 // FORMATO
 $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(3);
@@ -115,22 +60,24 @@ $spreadsheet->getActiveSheet()->getDefaultRowDimension('A1:L38')->setRowHeight(2
 
 $spreadsheet->getActiveSheet()->getStyle('D3:H38')->getNumberFormat()
     ->setFormatCode('#,##0.00');
-    
+  
+
+
     
 //Color Relleno columnas 
-$spreadsheet->getActiveSheet()->getStyle('F3:F38')->applyFromArray($rellenoColumn);
-$spreadsheet->getActiveSheet()->getStyle('D3:D38')->applyFromArray($relleno); 
+$spreadsheet->getActiveSheet()->getStyle('F3:F38')->applyFromArray(estilos('columna'));
+$spreadsheet->getActiveSheet()->getStyle('D3:D38')->applyFromArray(estilos('relleno')); 
 //Relleno FIla
-$spreadsheet->getActiveSheet()->getStyle('D2:G2')->applyFromArray($rellenoFila);
+$spreadsheet->getActiveSheet()->getStyle('D2:G2')->applyFromArray(estilos('fila'));
   
 //Borde de celdas
-$spreadsheet->getActiveSheet()->getStyle('A1:L38')->applyFromArray($styleArray); 
+$spreadsheet->getActiveSheet()->getStyle('A1:L38')->applyFromArray(estilos('estiloArray')); 
 //Fuente bol
-$spreadsheet->getActiveSheet()->getStyle('D2:L2')->applyFromArray($bold);   
+$spreadsheet->getActiveSheet()->getStyle('D2:L2')->applyFromArray(estilos('bold'));   
 
 //Centrar Titulo
-$spreadsheet->getActiveSheet()->getStyle('A1')->applyFromArray($centrar);
-$spreadsheet->getActiveSheet()->getStyle('D3:H38')->applyFromArray($centrar); 
+$spreadsheet->getActiveSheet()->getStyle('A1')->applyFromArray(estilos('centrar'));
+$spreadsheet->getActiveSheet()->getStyle('D3:H38')->applyFromArray(estilos('centrar')); 
 
 
 
@@ -234,7 +181,7 @@ if (mysqli_num_rows($resultado) > 0) {
     // output data of each row
     while($row = mysqli_fetch_assoc($resultado)) {
        echo "id Máximo del empleado es : " . $row["MAX(idempleado_prod)"]."<br>";
-        $idempleadoarray[] = $row['MAX(idempleado_prod)'];
+        $maximo = $row['MAX(idempleado_prod)'];
       //  $sheet->setCellValue('A2', "id Máximo del empleado es : " . $row["MAX(idempleado_prod)"]);
     }
 } else {
@@ -244,29 +191,32 @@ if (mysqli_num_rows($resultado) > 0) {
 
 
 
-$filacon = 3;
-//ENCABEZADO DE EMPLEADOS
-$idemp= array();
-$nombreemp = array();
-$apellidoemp = array();
 
 
-
-//SUMA LOS SALDOS
-$totalemp= array();
-$filaB = 3;
-for ($id = 1 ; $id <= $idempleadoarray[0]; $id++) {
+//Guarda registros de la primera semana seleccionada
+for ($id = 1 ; $id <= $maximo; $id++) {
    
     $sql5 = "SELECT idempleado_prod, nombreempleado, apellidoempleado, SUM(importe) FROM produccion 
     where idempleado_prod = " .$id. " AND fechaprod >= '" .$fechainiSEM1 . "' AND fechaprod <= '" .$fechafinSEM1 . "' ";
     
+    //Inserta datos de acuerdo a la consulta sql5
+    insertarDatos($sql5, $con);
+   
+}
+
+
+
+
+//Guarda registros de la segunda semana seleccionada
+for ($id = 1 ; $id <= $maximo; $id++) {
+   
     $sql6 = "SELECT idempleado_prod, nombreempleado, apellidoempleado, SUM(importe) FROM produccion 
     where idempleado_prod = " .$id. " AND fechaprod >= '" .$fechainiSEM2 . "' AND fechaprod <= '" .$fechafinSEM2 . "' ";
 
-    //Inserta datos de acuerdo a la consulta sql5
-    insertarDatos($sql5, $con);
-    //Actualiza el saldo 2 de acuerdo a la consulta sql6
-    updateDatos($sql6, $con, $id);
+    //Inserta datos de acuerdo a la consulta sql6
+   
+    insertarDatos2($sql6, $con);
+    
    
 }
 
@@ -276,8 +226,8 @@ for ($id = 1 ; $id <= $idempleadoarray[0]; $id++) {
  $nofila = 3;
 
 
-  $sql7 = "SELECT idempleado, nombre, sueldo1, bon1, sueldo2, bon2
-  FROM pagosemanal order by nombre ASC ";
+  $sql7 = "SELECT id, idempleado, nombre, SUM(sueldo1), 
+  SUM(bon1),SUM(sueldo2), SUM(bon2) FROM `pagosemanal` GROUP BY nombre; ";
 
   if (!$result = $con->query($sql7)) {
      die('There was an error running the query [' . $db->error . ']');
@@ -288,75 +238,34 @@ for ($id = 1 ; $id <= $idempleadoarray[0]; $id++) {
     $sheet->setCellValue('A'.$nofila, $noconse);
     $sheet->setCellValue('B'.$nofila, $row['idempleado']);
     $sheet->setCellValue('C'.$nofila, strtoupper($row['nombre']) ); 
-    $sheet->setCellValue('D'.$nofila, "$".$row['sueldo1'] );
-    $sheet->setCellValue('E'.$nofila, "$".$row['bon1']  );
-    $sheet->setCellValue('F'.$nofila, "$".$row['sueldo2'] );
-    $sheet->setCellValue('G'.$nofila, "$".$row['bon2']  );
-    $sheet->setCellValue('H'.$nofila, "$".($row['sueldo1'] +  $row['bon1']  +  $row['sueldo2'] + $row['bon2']) );
+    $sheet->setCellValue('D'.$nofila, $row['SUM(sueldo1)'] );
+    $sheet->setCellValue('E'.$nofila, $row['SUM(bon1)']  );
+    $sheet->setCellValue('F'.$nofila, $row['SUM(sueldo2)'] );
+    $sheet->setCellValue('G'.$nofila, $row['SUM(bon2)']  );
+    $sheet->setCellValue('H'.$nofila, ($row['SUM(sueldo1)'] +  $row['SUM(bon1)']  +  $row['SUM(sueldo2)'] + $row['SUM(bon2)']) );
     echo 'empleado no: '. $row['nombre']  . '';
     $nofila++;
     $noconse++;
 }
 
 
+
 $fileName = 'PAGO DEL '.$fecha1Dato1.' DE '.$mes1Dato1. ' AL ' .$fecha2Dato2.' DE '.$mes2Dato2.'.xlsx';
 ob_clean();
 $writer = new Xlsx($spreadsheet);
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment; filename="'. $fileName.'"');
-        $writer->save('php://output');
+        header('Cache-Control: max-age=0');
 
-        //header( "refresh:5;url=index.html" );        
+
+$writer->save('php://output');
+        
 
 /**
  * FUNCIONES
  */
 
- 
-function insertarDatos($sql5, $con){
-    if (!$result = $con->query($sql5)) {
-        die('There was an error running the query [' . $db->error . ']');
-    }
 
-    
-    while ($row = $result->fetch_assoc()) {
-
-
-        if( !is_null( $row['idempleado_prod'])  and !is_null($row['nombreempleado'])){
-           
-                $queryInsert = "INSERT INTO pagosemanal SET
-                        idempleado = " .$row["idempleado_prod"]. ",
-                        nombre = '" .$row["nombreempleado"]. " " .$row["apellidoempleado"]."',
-                        sueldo1 = " .$row["SUM(importe)"]. ",
-                        bon1 = " .(5 / 100) * $row["SUM(importe)"]. ",
-                        sueldo2 = 0.0,
-                        bon2 = 0.0";
-                $insert = mysqli_query($con,$queryInsert);
-        }
-    }    
-}
-
-
-function updateDatos($sql6, $con, $id){
-    if (!$result = $con->query($sql6)) {
-        die('There was an error running the query [' . $db->error . ']');
-    }
-
-    
-    while ($row = $result->fetch_assoc()) {
-
-        
-     
-
-        if( !is_null( $row['idempleado_prod'])  and !is_null($row['nombreempleado'])){
-            
-                $queryUpdate = "UPDATE pagosemanal SET
-                        sueldo2 = " .$row['SUM(importe)']. " ,
-                        bon2 = " .(5 / 100) * $row["SUM(importe)"]. " WHERE idempleado = " .$id.  " ";
-                $update = mysqli_query($con, $queryUpdate);
-        }
-    }    
-}
 
 function mesPalabra($fecha){
 
@@ -387,5 +296,149 @@ function diaNum($fecha){
     $dia = date("d", strtotime($fecha) );
     echo " -DIA- " .$dia;
     return $dia;
+
+}
+
+
+function insertarDatos($sql5, $con){
+    if (!$result = $con->query($sql5)) {
+        die('There was an error running the query [' . $db->error . ']');
+    }
+
+    
+    while ($row = $result->fetch_assoc()) {
+
+        
+        if( !is_null( $row['idempleado_prod'])  and !is_null($row['nombreempleado'])){
+            
+            
+            
+                $queryInsert = "INSERT INTO pagosemanal SET
+                        idempleado = " .$row["idempleado_prod"]. ",
+                        nombre = '" .$row["nombreempleado"]. " " .$row["apellidoempleado"]."',
+                        sueldo1 = " .$row["SUM(importe)"]. ",
+                        bon1 = " .(5 / 100) * $row["SUM(importe)"]. ",
+                        sueldo2 = 0.0,
+                        bon2 = 0.0";
+                $insert = mysqli_query($con,$queryInsert);
+        }
+    }    
+}
+
+
+function insertarDatos2($sql6, $con){
+    if (!$result = $con->query($sql6)) {
+        die('There was an error running the query [' . $db->error . ']');
+    }
+
+    
+    while ($row = $result->fetch_assoc()) {
+
+        
+        if( !is_null( $row['idempleado_prod'])  and !is_null($row['nombreempleado'])){
+            
+            
+            
+                $queryInsert = "INSERT INTO pagosemanal SET
+                        idempleado = " .$row["idempleado_prod"]. ",
+                        nombre = '" .$row["nombreempleado"]. " " .$row["apellidoempleado"]."',
+                        sueldo1 =  0.0,
+                        bon1 = 0.0 ,
+                        sueldo2 = " .$row["SUM(importe)"]. ",
+                        bon2 = " .(5 / 100) * $row["SUM(importe)"]. " ";
+                $insert = mysqli_query($con,$queryInsert);
+        }
+    }    
+}
+
+
+
+function estilos($estilo){
+    $styleArray = [
+    
+    
+        'borders' => [
+            'allBorders' => [
+                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                'color' => ['argb' => '000000'],
+            ],
+        ],
+    
+        'alignment' => [
+            'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+        ],
+    
+    ];
+    
+    $centrar = [
+        
+        
+        'alignment' => [
+            'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+            //'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+        ],
+    
+    ];
+    
+    
+    $bold = [
+        'font' => [
+            'bold' => true,
+        ],
+    ];
+    
+    $relleno = [
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'color' => ['argb' => 'C6E0B4'],
+        ],
+    
+    ];
+    
+    $rellenoColumn = [
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'color' => ['argb' => '99E5FF'],
+        ],
+    
+    ];
+    
+    $rellenoFila = [
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'color' => ['rgb' => '9BC2E6'],
+        ],
+    
+    ];
+
+    switch ($estilo) {
+        case 'estiloArray':
+            # code...
+            return $styleArray;
+            break;
+        case 'centrar':
+            # code...
+            return $centrar;
+            break;
+
+        case 'bold':
+            # code...
+            return $bold;
+            break;
+        case 'relleno':
+            # code...
+            return $relleno;
+            break;
+        case 'fila':
+            # code...
+            return $rellenoFila;
+            break;
+        case 'columna':
+            # code...
+            return $rellenoColumn;
+            break;
+
+        
+    }
 
 }
