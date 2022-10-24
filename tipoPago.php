@@ -1,5 +1,5 @@
 <?php
-
+//session_start();
 
     //Conexion a la base de datos 
     $con=mysqli_connect("localhost","root","","sombrerosoficina");
@@ -290,9 +290,9 @@ $result = mysqli_query($con, $sqlTabla);
                     //header( "refresh:1; url=tipoPago.php" ); 
                    // header("location:tipoPago.php");
                   // parent.window.location.reload();
-                   
+                  header('Location: tipoPago.php');
 
-
+                  header("Refresh: 1; url=index.html");
                    // header('Location: tipoPago.php');
 
 				}
