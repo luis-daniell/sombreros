@@ -26,6 +26,7 @@
             <li><a href='index.html'><span>Inicio</span></a></li>
             <li><a href='importadatos.php'><span>Importar datos</span></a></li>
             <li class='active'><a href='pruebaExcel.php'><span>Reportes</span></a></li>
+            <li><a href='tipoPago.php'><span>Tipos de pago</span></a></li>
             <!-- <li class='last'><a href='#'><span>Contact</span></a></li> -->
         </ul>
     </div>

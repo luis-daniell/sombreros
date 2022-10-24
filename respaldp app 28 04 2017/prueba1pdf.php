@@ -92,7 +92,7 @@ class PDF extends FPDF
 $pdf = new PDF();
 // Títulos de las columnas
 //$header = array('País', 'Capital', 'Superficie (km2)', 'Pobl. (en miles)');
-$header = array ('Nombre', 'Apellido', 'Observaciones', 'Activo')
+$header = array ('Nombre', 'Apellido', 'Observaciones', 'Activo');
 
 
 // Carga de datos, llama a la funcion Load Data

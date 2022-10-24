@@ -1,57 +1,61 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="UTF-8">
     <title>Importa archivo de tableta</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/styles.css" media="all" >
+    <link rel="stylesheet" href="css/styles.css" media="all">
     <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
     <script src="script.js"></script>
-    <link  rel="shortcut icon" href="images/favicon.ico" />
+    <link rel="shortcut icon" href="images/favicon.ico" />
 </head>
+
 <body id="main_body">
 
 
-<!-- menu -->
+    <!-- menu -->
 
-<div id='cssmenu'>
-    <ul>
-        <li ><a href='index.html'><span>Inicio</span></a></li>
-        <li class='active'><a href='importadatos.php'><span>Importar datos</span></a></li>
-        <li><a href='fechas.php'><span>Reportes</span></a></li>
-        <!-- <li class='last'><a href='#'><span>Contact</span></a></li> -->
-    </ul>
-</div>
+    <div id='cssmenu'>
+        <ul>
+            <li><a href='index.html'><span>Inicio</span></a></li>
+            <li class='active'><a href='importadatos.php'><span>Importar datos</span></a></li>
+            <li><a href='fechas.php'><span>Reportes</span></a></li>
+            <li><a href='tipoPago.php'><span>Tipos de pago</span></a></li>
+            <!-- <li class='last'><a href='#'><span>Contact</span></a></li> -->
+        </ul>
+    </div>
 
-<img id="top" src="top.png" alt="">
-<div id="form_container">
+    <img id="top" src="top.png" alt="">
+    <div id="form_container">
 
-    <h1><a>Importar trabajos a la base de datos</a></h1>
-    <!-- formulario -->
-    <form enctype="multipart/form-data" action="importa.php" method="POST">
+        <h1><a>Importar trabajos a la base de datos</a></h1>
+        <!-- formulario -->
+        <form enctype="multipart/form-data" action="importa.php" method="POST">
 
-        <div class="form_description">
-            <h2>Importar trabajos a la base de datos</h2>
-            <p>Selecciona el archivo enviado desde la tableta.<br>
-                Solo haz este procedimiento una vez, o se duplicarán los datos.
-                <br>
-                Verifica que el archivo a subir sea el correcto!!</p>
-        </div>
-
-
-        <input type="hidden" name="MAX_FILE_SIZE" value="250000" />
-        <label class="description" for="element_1">Selecciona el archivo </label>
-        <br>
-        <input name="archivo-a-subir" type="file" /><br>
-        <br>
-        <input  type="submit" value="Subir Archivo" />
-    </form>
+            <div class="form_description">
+                <h2>Importar trabajos a la base de datos</h2>
+                <p>Selecciona el archivo enviado desde la tableta.<br>
+                    Solo haz este procedimiento una vez, o se duplicarán los datos.
+                    <br>
+                    Verifica que el archivo a subir sea el correcto!!
+                </p>
+            </div>
 
 
-</div>
+            <input type="hidden" name="MAX_FILE_SIZE" value="250000" />
+            <label class="description" for="element_1">Selecciona el archivo </label>
+            <br>
+            <input name="archivo-a-subir" type="file" /><br>
+            <br>
+            <input type="submit" value="Subir Archivo" />
+        </form>
 
-<?php
+
+    </div>
+
+    <?php
 /*
     <!-- menu -->
 
@@ -90,4 +94,3 @@ Mas Información en: http://jonathanmelgoza.com/blog/subida-de-archivos-en-php/#
 
 
 </html>
-
