@@ -30,18 +30,19 @@ $sheet = $spreadsheet->getActiveSheet();
 // FORMATO
 $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(3);
 $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(8);
-$spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(35);
+$spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(10);
+$spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(35);
 
-$spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(14);
-$spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(11);
-$spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(14);
-$spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(11);
+$spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(14);
+$spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(11);
+$spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(14);
+$spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(11);
 
-$spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(10);
 $spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(10);
-$spreadsheet->getActiveSheet()->getColumnDimension('J')->setWidth(10);
 $spreadsheet->getActiveSheet()->getColumnDimension('K')->setWidth(10);
-$spreadsheet->getActiveSheet()->getColumnDimension('L')->setWidth(12);
+$spreadsheet->getActiveSheet()->getColumnDimension('K')->setWidth(10);
+$spreadsheet->getActiveSheet()->getColumnDimension('L')->setWidth(10);
+$spreadsheet->getActiveSheet()->getColumnDimension('M')->setWidth(12);
 
 
 //COMBINA CELDAS
@@ -53,31 +54,31 @@ $spreadsheet->getDefaultStyle()->getFont()->setName('Arial');
 
 
 //ALTURA PREDETERMINADA
-$spreadsheet->getActiveSheet()->getDefaultRowDimension('A1:L38')->setRowHeight(21);
+$spreadsheet->getActiveSheet()->getDefaultRowDimension('A1:M38')->setRowHeight(21);
 
 //Altura FILA
 //$spreadsheet->getActiveSheet()->getRowDimension('2')->setRowHeight(30);
 
-$spreadsheet->getActiveSheet()->getStyle('D3:H38')->getNumberFormat()
+$spreadsheet->getActiveSheet()->getStyle('E3:H38')->getNumberFormat()
     ->setFormatCode('#,##0.00');
   
 
 
     
 //Color Relleno columnas 
-$spreadsheet->getActiveSheet()->getStyle('F3:F38')->applyFromArray(estilos('columna'));
-$spreadsheet->getActiveSheet()->getStyle('D3:D38')->applyFromArray(estilos('relleno')); 
+$spreadsheet->getActiveSheet()->getStyle('G3:G38')->applyFromArray(estilos('columna'));
+$spreadsheet->getActiveSheet()->getStyle('E3:E38')->applyFromArray(estilos('relleno')); 
 //Relleno FIla
-$spreadsheet->getActiveSheet()->getStyle('D2:G2')->applyFromArray(estilos('fila'));
+$spreadsheet->getActiveSheet()->getStyle('E2:H2')->applyFromArray(estilos('fila'));
   
 //Borde de celdas
-$spreadsheet->getActiveSheet()->getStyle('A1:L38')->applyFromArray(estilos('estiloArray')); 
+$spreadsheet->getActiveSheet()->getStyle('A1:M38')->applyFromArray(estilos('estiloArray')); 
 //Fuente bol
-$spreadsheet->getActiveSheet()->getStyle('D2:L2')->applyFromArray(estilos('bold'));   
+$spreadsheet->getActiveSheet()->getStyle('E2:M2')->applyFromArray(estilos('bold'));   
 
 //Centrar Titulo
 $spreadsheet->getActiveSheet()->getStyle('A1')->applyFromArray(estilos('centrar'));
-$spreadsheet->getActiveSheet()->getStyle('D3:H38')->applyFromArray(estilos('centrar')); 
+$spreadsheet->getActiveSheet()->getStyle('E3:I38')->applyFromArray(estilos('centrar')); 
 
 
 
@@ -113,19 +114,20 @@ $titulo = "PAGO DEL $fecha1Dato1 DE $mes1Dato1 AL $fecha2Dato2 DE $mes2Dato2";
 $sheet->setTitle("PAGO");
 $sheet->setCellValue('A1', $titulo);
 //$sheet->setCellValue('D1', $titulo2);
-$sheet->setCellValue('D2','SUELDO 1 4%');
-$sheet->setCellValue('E2','BONIF 1 5%');
-$sheet->setCellValue('F2','SUELDO 2 4%');
-$sheet->setCellValue('G2','BONIF 2 5%');
-$sheet->setCellValue('H2','TOTAL');
-$sheet->setCellValue('I2','DESC. PTO');
-$sheet->setCellValue('J2','OTROS');
-$sheet->setCellValue('K2','PAGO');
-$sheet->setCellValue('L2','SALDO PTO.');
+$sheet->setCellValue('E2','SUELDO 1 4%');
+$sheet->setCellValue('F2','BONIF 1 5%');
+$sheet->setCellValue('G2','SUELDO 2 4%');
+$sheet->setCellValue('H2','BONIF 2 5%');
+$sheet->setCellValue('I2','TOTAL');
+$sheet->setCellValue('J2','DESC. PTO');
+$sheet->setCellValue('K2','OTROS');
+$sheet->setCellValue('L2','PAGO');
+$sheet->setCellValue('M2','SALDO PTO.');
 
 $sheet->setCellValue('A2','NO.');
 $sheet->setCellValue('B2','NO. EMP');
-$sheet->setCellValue('C2','NOMBRE');
+$sheet->setCellValue('C2','TIP. PAGO');
+$sheet->setCellValue('D2','NOMBRE');
 
 
 
@@ -226,23 +228,30 @@ for ($id = 1 ; $id <= $maximo; $id++) {
  $nofila = 3;
 
 
-  $sql7 = "SELECT id, idempleado, nombre, SUM(sueldo1), 
-  SUM(bon1),SUM(sueldo2), SUM(bon2) FROM `pagosemanal` GROUP BY nombre; ";
+  //$sql7 = "SELECT id, idempleado, nombre, SUM(sueldo1), 
+  //SUM(bon1),SUM(sueldo2), SUM(bon2) FROM `pagosemanal` GROUP BY nombre; ";
+
+    $sql7 = "SELECT pagosemanal.id, pagosemanal.idempleado as 'idempleado', pagosemanal.nombre as 'nombre', SUM(pagosemanal.sueldo1) as 'sueldo1', SUM(pagosemanal.bon1) as 'bon1', SUM(pagosemanal.sueldo2) as 'sueldo2', SUM(pagosemanal.bon2) as 'bon2', clientes.tipoPago as 'tipo' FROM pagosemanal inner join clientes on pagosemanal.idempleado = clientes.idempleado  GROUP BY pagosemanal.nombre order by clientes.tipoPago, pagosemanal.nombre";
+
 
   if (!$result = $con->query($sql7)) {
      die('There was an error running the query [' . $db->error . ']');
  }
 
+ 
+//$activeSheet->setCellValue('H'.$i ,);
+
  while ($row = $result->fetch_assoc()) {
-//  //   $sheet->setCellValue('B'.$filaB, 'empleado no: '. $id  . ' sum importe ' . $totalemp[$id]);
+    
     $sheet->setCellValue('A'.$nofila, $noconse);
     $sheet->setCellValue('B'.$nofila, $row['idempleado']);
-    $sheet->setCellValue('C'.$nofila, strtoupper($row['nombre']) ); 
-    $sheet->setCellValue('D'.$nofila, $row['SUM(sueldo1)'] );
-    $sheet->setCellValue('E'.$nofila, $row['SUM(bon1)']  );
-    $sheet->setCellValue('F'.$nofila, $row['SUM(sueldo2)'] );
-    $sheet->setCellValue('G'.$nofila, $row['SUM(bon2)']  );
-    $sheet->setCellValue('H'.$nofila, ($row['SUM(sueldo1)'] +  $row['SUM(bon1)']  +  $row['SUM(sueldo2)'] + $row['SUM(bon2)']) );
+    $sheet->setCellValue('C'.$nofila, $row['tipo']);
+    $sheet->setCellValue('D'.$nofila, strtoupper($row['nombre']) ); 
+    $sheet->setCellValue('E'.$nofila, $row['sueldo1'] );
+    $sheet->setCellValue('F'.$nofila, $row['bon1']  );
+    $sheet->setCellValue('G'.$nofila, $row['sueldo2'] );
+    $sheet->setCellValue('H'.$nofila, $row['bon2']  );
+    $sheet->setCellValue('I'.$nofila,  '=SUM(E'.$nofila.':H'.$nofila.')' );
     echo 'empleado no: '. $row['nombre']  . '';
     $nofila++;
     $noconse++;

@@ -43,20 +43,6 @@
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
     
 
 //Tabla para guardar los clientes y su tipo de pago
@@ -64,7 +50,8 @@ $sqlTabla = "CREATE TABLE IF NOT EXISTS clientes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     idempleado INT NOT NULL,
     nombre VARCHAR(255) NOT NULL,
-    tipoPago INT DEFAULT 0
+    tipoPago INT DEFAULT 0,
+    activo smallint DEFAULT 1
 )";
 $result = mysqli_query($con, $sqlTabla);
 
@@ -84,13 +71,6 @@ $sqlTabla = "CREATE TABLE IF NOT EXISTS actualizaCliente (
 )";
 
 $result = mysqli_query($con, $sqlTabla);
-
-
-
-
-
-
-
 
 
 
@@ -128,16 +108,6 @@ $result = mysqli_query($con, $sqlTabla);
 
 
 
-
-
-
-
-
-
-
-
-
-
   //Actualiza los clientes en caso de que se agrego uno nuevo 
   $agrupacion = "select idempleado_prod, nombreempleado, apellidoempleado from produccion GROUP by nombreempleado";
 
@@ -157,14 +127,22 @@ $result = mysqli_query($con, $sqlTabla);
         $insert = mysqli_query($con,$queryInsert);
         
     } 
+    
 
     //Consulta que se utiliza para mostrar a los clientes
-    $clientes="SELECT * FROM clientes";
+    $clientes="SELECT * FROM clientes WHERE activo = 1";
     $resClientes=$con->query($clientes);
 
+    //Consulta para traer los registros que no estan registrado en la tabla
+    $clientesnoRegistrados = "Select * from actualizacliente where not exists (select 1 from clientes where clientes.idempleado = actualizacliente.idempleado)";
+    $resClientesNoRegistrados=$con->query($clientesnoRegistrados);
 
 
-?>
+    $existe = "Select * from actualizacliente where not exists (select 1 from clientes where clientes.idempleado = actualizacliente.idempleado)";
+    $resExiste=$con->query($existe);
+    $row6=mysqli_fetch_row($resExiste);
+    
+    ?>
 
 
 <html>
@@ -208,93 +186,174 @@ $result = mysqli_query($con, $sqlTabla);
     <br>
     <?php
 
-    /*if (isset($_POST['generar'])) {
-        
-        $fecha1 = $_POST['fecha1'];
-        echo"<br>";
-        $fecha2 = $_POST['fecha2'];
-        echo"<br>";
-        $fecha3 = $_POST['fecha3'];
-        echo"<br>";
-        $fecha4 = $_POST['fecha4'];
-        //echo $example . " " . $example2;
-        //header('Location: fechas.php'); 
-        
-    }*/
-
 
 ?>
     <div style="text-align:center;">
+
+
         <form method="POST" action="procesaDatoPago.php">
 
-
-
-
-
-
             <?php
-
+                
                 while ($registroClientes = $resClientes->fetch_array(MYSQLI_BOTH))
 
                 {
 
-                    echo'<tr>
-                        <td hidden><input name="idalu[]" value="'.$registroClientes['idempleado'].'" /></td>
+                    echo'<div style="display: flex; align-items: center; justify-content: center;">
+                       
+                    
+                        <div  style=" height: 50px;  width:30px; " >
+                            <input style="visibility:hidden;" name="idalu[]" value="'.$registroClientes['idempleado'].'" />
+                        </div>
+
+
                         
-                        <td><input name="idalu2['.$registroClientes['idempleado'].']" value="'.$registroClientes['idempleado'].'" /></td>
                         
-                        <td><input name="nom['.$registroClientes['idempleado'].']" value="'.$registroClientes['nombre'].'" /></td>
+                        <div  style=" padding-right:30px;  ">
+                            <input style=" height: 28px;" readOnly="readonly" name="idalu2['.$registroClientes['idempleado'].']" value="'.$registroClientes['idempleado'].'" />
+                        </div>
                         
-                        <td><input name="tipo['.$registroClientes['idempleado'].']" value="'.$registroClientes['tipoPago'].'" /></td>
+                        <div  style=" padding-right:30px;">
+                            <input  style=" height: 28px;" readOnly="readonly" name="nom['.$registroClientes['idempleado'].']" value="'.$registroClientes['nombre'].'" />
+                        </div >
+                        
+                        <select style=" height: 28px;" name="tipo['.$registroClientes['idempleado'].']">
+                            <option value="0" ' . ($registroClientes['tipoPago']==0 ? 'selected ' : ''). '  >
+                            --- Seleccione ---
+                            </option>
+                            
+                            <option value="1" ' . ($registroClientes['tipoPago']==1 ? 'selected ' : ''). '>
+                                Pago 1
+                            </option>
+                            
+                            <option value="2" ' . ($registroClientes['tipoPago']==2 ? 'selected ' : ''). '>
+                                Pago 2
+                            </option>
+
+                            <option value="3" ' . ($registroClientes['tipoPago']==3 ? 'selected ' : ''). '>
+                                Pago 3
+                            </option>
+                        </select>
+
+                       
+
+                        <div  style=" padding-left:30px;">
+                        <input type="hidden" name="activo['.$registroClientes['idempleado'].']" value="0">
+                            <input  name="activo['.$registroClientes['idempleado'].']" type="checkbox" id="cbox2" value="1" checked> <label for="cbox2" id="textoh3">ACTIVO</label>
+                        </div>
+
                         <br>
-                        <br>
-                        </tr>';
+                    <br>
+                </div>';
                 }
-
-
-             ?>
-
-
-
-
-
-
-
-
-
+            ?>
+            <br>
             <!-- <button type="submit" class="btn btn-primary " style="margin-top: 10px ;">Guardar</button> -->
-            <input type="submit" name="actualizar" value="Guardar" />
-
-
+            <input type="submit" name="actualizar" value="Guardar" style='width:90px; height:35px' />
         </form>
 
 
 
 
+
+        <form method="POST" action="procesaDatoPago.php">
+
+            <?php
+                
+                if ( is_null($row6[0]) )
+                    {
+                    echo '<div>
+                            <p id="textoh3">SIN DATOS NUEVOS</p>
+                    </div>';
+                    } else {
+                        
+                        echo "<div>
+                        <p id= 'textoh3'>Datos a registrar </p>
+                </div>";
+                    }
+                
+
+
+                while ($registroClientes2 = $resClientesNoRegistrados->fetch_array(MYSQLI_BOTH))
+
+                {
+
+                    
+
+                    echo'<div style="display: flex; align-items: center; justify-content: center;">
+                       
+                    
+                        <div  style=" height: 50px;  width:30px; " >
+                            <input style="visibility:hidden;" name="idalu2[]" value="'.$registroClientes2['idempleado'].'" />
+                        </div>
+
+
+                        
+                        
+                        <div  style=" padding-right:30px;  ">
+                            <input style=" height: 28px;" readOnly="readonly" name="idalu3['.$registroClientes2['idempleado'].']" value="'.$registroClientes2['idempleado'].'" />
+                        </div>
+                        
+                        <div  style=" padding-right:30px;">
+                            <input  style=" height: 28px;" readOnly="readonly" name="nom2['.$registroClientes2['idempleado'].']" value="'.$registroClientes2['nombre'].'" />
+                        </div >
+                        
+                        <select style=" height: 28px;" name="tipo2['.$registroClientes2['idempleado'].']">
+                            <option value="0" ' . ($registroClientes2['tipoPago']==0 ? 'selected ' : ''). '  >
+                            --- Seleccione ---
+                            </option>
+                            
+                            <option value="1" ' . ($registroClientes2['tipoPago']==1 ? 'selected ' : ''). '>
+                                Pago 1
+                            </option>
+                            
+                            <option value="2" ' . ($registroClientes2['tipoPago']==2 ? 'selected ' : ''). '>
+                                Pago 2
+                            </option>
+
+                            <option value="3" ' . ($registroClientes2['tipoPago']==3 ? 'selected ' : ''). '>
+                                Pago 3
+                            </option>
+                        </select>
+
+                       
+
+                        <div  style=" padding-left:30px;">
+                        <input type="hidden" name="activo2['.$registroClientes2['idempleado'].']" value="0">
+                            <input  name="activo2['.$registroClientes2['idempleado'].']" type="checkbox" id="cbox2" value="1" checked> <label for="cbox2" id="textoh3">ACTIVO</label>
+                        </div>
+
+                        <br>
+                    <br>
+                </div>';
+                }
+
+
+                if ( is_null($row6[0]) )
+                {
+                echo '<div>
+                        <p></p>
+                </div>';
+                } else {
+                    
+                    echo '<div>
+                    <input type="submit" name="actualizar_datos" value="Guardar" style="width:90px; height:35px" />
+                    </div>';
+           
+                }
+                    
+                    
+            ?>
+            <br>
+
+
+        </form>
+
+
     </div>
 
-
-
     <br>
-
     <br>
-
-    <script language="JavaScript" type="text/javascript">
-    var pagina = "http://www.yahoo.com"
-
-    function redireccionar() {
-        location.href = pagina;
-    }
-
-    function miFuncion() {
-        alert("Activaste la funcion miFuncion()");
-    }
-    //setTimeout ("redireccionar()", 20000);
-    </script>
-
-
-
-
 
 </body>
 
