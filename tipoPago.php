@@ -158,7 +158,7 @@ $result = mysqli_query($con, $sqlTabla);
         
     } 
 
-
+    //Consulta que se utiliza para mostrar a los clientes
     $clientes="SELECT * FROM clientes";
     $resClientes=$con->query($clientes);
 
@@ -225,7 +225,7 @@ $result = mysqli_query($con, $sqlTabla);
 
 ?>
     <div style="text-align:center;">
-        <form method="POST">
+        <form method="POST" action="procesaDatoPago.php">
 
 
 
@@ -269,41 +269,6 @@ $result = mysqli_query($con, $sqlTabla);
         </form>
 
 
-        <?php
-
-			if(isset($_POST['actualizar']))
-			{
-				foreach ($_POST['idalu'] as $ids) 
-				{
-					$id=mysqli_real_escape_string($con, $_POST['idalu2'][$ids]);
-					$editPago=mysqli_real_escape_string($con, $_POST['tipo'][$ids]);
-					//$editCarr=mysqli_real_escape_string($conexion, $_POST['carr'][$ids]);
-					//$editGru=mysqli_real_escape_string($conexion, $_POST['gru'][$ids]);
-
-					$actualizar=$con->query("UPDATE clientes SET tipoPago='$editPago'
-																		 WHERE idempleado='$id'");
-				}
-
-				if($actualizar==true)
-				{
-					echo "FUNCIONA!";
-                    //header( "refresh:1; url=tipoPago.php" ); 
-                   // header("location:tipoPago.php");
-                  // parent.window.location.reload();
-                  header('Location: tipoPago.php');
-
-                  header("Refresh: 1; url=index.html");
-                   // header('Location: tipoPago.php');
-
-				}
-
-				else
-				{
-					echo "NO FUNCIONA!";
-				}
-			}
-
-		?>
 
 
     </div>
@@ -313,6 +278,23 @@ $result = mysqli_query($con, $sqlTabla);
     <br>
 
     <br>
+
+    <script language="JavaScript" type="text/javascript">
+    var pagina = "http://www.yahoo.com"
+
+    function redireccionar() {
+        location.href = pagina;
+    }
+
+    function miFuncion() {
+        alert("Activaste la funcion miFuncion()");
+    }
+    //setTimeout ("redireccionar()", 20000);
+    </script>
+
+
+
+
 
 </body>
 
