@@ -21,7 +21,7 @@ if(isset($_POST['actualizar']))
         $activo=mysqli_real_escape_string($con, $_POST['activo'][$ids]);
 
 
-        $actualizar=$con->query("UPDATE clientes SET tipoPago='$editPago', activo = $activo
+        $actualizar=$con->query("UPDATE empleados SET tipoPago='$editPago', activo = $activo
                                                              WHERE idempleado='$id'");
     }
 
@@ -53,7 +53,7 @@ if(isset($_POST['actualizar_datos']))
         //Syntax
         //INSERT INTO table_name (column1, column2, column3, ...)
         //VALUES (value1, value2, value3, ...);
-        $actualizar2=$con->query("INSERT INTO CLIENTES (idempleado, nombre, tipoPago, activo) VALUES($id2, '$nombre2', $editPago2, $activo2 ) ");
+        $actualizar2=$con->query("INSERT INTO empleados (idempleado, nombre, tipoPago, activo) VALUES($id2, '$nombre2', $editPago2, $activo2 ) ");
     }
 
     if($actualizar2==true)

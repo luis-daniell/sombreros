@@ -45,8 +45,8 @@
 
     
 
-//Tabla para guardar los clientes y su tipo de pago
-$sqlTabla = "CREATE TABLE IF NOT EXISTS clientes (
+//Tabla para guardar los empleados y su tipo de pago
+$sqlTabla = "CREATE TABLE IF NOT EXISTS empleados (
     id INT AUTO_INCREMENT PRIMARY KEY,
     idempleado INT NOT NULL,
     nombre VARCHAR(255) NOT NULL,
@@ -60,10 +60,10 @@ $result = mysqli_query($con, $sqlTabla);
 
 
 //Tabla para ver los clientes actualizados 
-$borraT = "DROP TABLE IF EXISTS actualizaCliente";
+$borraT = "DROP TABLE IF EXISTS actualizaEmpleado";
 $result = mysqli_query($con, $borraT);
 
-$sqlTabla = "CREATE TABLE IF NOT EXISTS actualizaCliente (
+$sqlTabla = "CREATE TABLE IF NOT EXISTS actualizaEmpleado (
     id INT AUTO_INCREMENT PRIMARY KEY,
     idempleado INT NOT NULL,
     nombre VARCHAR(255) NOT NULL,
@@ -77,7 +77,7 @@ $result = mysqli_query($con, $sqlTabla);
 //Consulta para ver si existen registros en los tipos de pago 
 
   //Revisa si existen registros
-  $sql3 = "SELECT COUNT(*) AS total FROM clientes";
+  $sql3 = "SELECT COUNT(*) AS total FROM empleados";
   $cons = mysqli_query($con, $sql3);
   $row = mysqli_fetch_assoc($cons);
 
@@ -96,7 +96,7 @@ $result = mysqli_query($con, $sqlTabla);
 
     while ($row = $result->fetch_assoc()) {
 
-        $queryInsert = "INSERT INTO clientes SET
+        $queryInsert = "INSERT INTO empleados SET
             idempleado = " .$row["idempleado_prod"]. ",
             nombre = '" .$row["nombreempleado"]. " " .$row["apellidoempleado"]."'
             ";
@@ -108,7 +108,7 @@ $result = mysqli_query($con, $sqlTabla);
 
 
 
-  //Actualiza los clientes en caso de que se agrego uno nuevo 
+  //Actualiza los empleados en caso de que se agrego uno nuevo 
   $agrupacion = "select idempleado_prod, nombreempleado, apellidoempleado from produccion GROUP by nombreempleado";
 
     if (!$result = $con->query($agrupacion)) {
@@ -119,7 +119,7 @@ $result = mysqli_query($con, $sqlTabla);
 
     while ($row = $result->fetch_assoc()) {
 
-        $queryInsert = "INSERT INTO actualizaCliente SET
+        $queryInsert = "INSERT INTO actualizaEmpleado SET
             idempleado = " .$row["idempleado_prod"]. ",
             nombre = '" .$row["nombreempleado"]. " " .$row["apellidoempleado"]."'
             ";
@@ -129,16 +129,16 @@ $result = mysqli_query($con, $sqlTabla);
     } 
     
 
-    //Consulta que se utiliza para mostrar a los clientes
-    $clientes="SELECT * FROM clientes WHERE activo = 1";
+    //Consulta que se utiliza para mostrar a los empleados
+    $clientes="SELECT * FROM empleados WHERE activo = 1";
     $resClientes=$con->query($clientes);
 
     //Consulta para traer los registros que no estan registrado en la tabla
-    $clientesnoRegistrados = "Select * from actualizacliente where not exists (select 1 from clientes where clientes.idempleado = actualizacliente.idempleado)";
+    $clientesnoRegistrados = "Select * from actualizaEmpleado where not exists (select 1 from empleados where empleados.idempleado = actualizaEmpleado.idempleado)";
     $resClientesNoRegistrados=$con->query($clientesnoRegistrados);
 
 
-    $existe = "Select * from actualizacliente where not exists (select 1 from clientes where clientes.idempleado = actualizacliente.idempleado)";
+    $existe = "Select * from actualizaEmpleado where not exists (select 1 from empleados where empleados.idempleado = actualizaEmpleado.idempleado)";
     $resExiste=$con->query($existe);
     $row6=mysqli_fetch_row($resExiste);
     
@@ -172,7 +172,7 @@ $result = mysqli_query($con, $sqlTabla);
         <ul>
             <li><a href='index.html'><span>Inicio</span></a></li>
             <li><a href='importadatos.php'><span>Importar datos</span></a></li>
-            <li><a href='pruebaExcel.php'><span>Reportes</span></a></li>
+            <li><a href='fechas.php'><span>Reportes</span></a></li>
             <li class='active'><a href='tipoPago.php'><span>Tipos de pago</span></a></li>
             <!-- <li class='last'><a href='#'><span>Contact</span></a></li> -->
         </ul>
