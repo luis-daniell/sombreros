@@ -231,7 +231,7 @@ for ($id = 1 ; $id <= $maximo; $id++) {
   //$sql7 = "SELECT id, idempleado, nombre, SUM(sueldo1), 
   //SUM(bon1),SUM(sueldo2), SUM(bon2) FROM `pagosemanal` GROUP BY nombre; ";
 
-    $sql7 = "SELECT pagosemanal.id, pagosemanal.idempleado as 'idempleado', pagosemanal.nombre as 'nombre', SUM(pagosemanal.sueldo1) as 'sueldo1', SUM(pagosemanal.bon1) as 'bon1', SUM(pagosemanal.sueldo2) as 'sueldo2', SUM(pagosemanal.bon2) as 'bon2', clientes.tipoPago as 'tipo' FROM pagosemanal inner join clientes on pagosemanal.idempleado = clientes.idempleado  GROUP BY pagosemanal.nombre order by clientes.tipoPago, pagosemanal.nombre";
+    $sql7 = "SELECT pagosemanal.id, pagosemanal.idempleado as 'idempleado', pagosemanal.nombre as 'nombre', SUM(pagosemanal.sueldo1) as 'sueldo1', SUM(pagosemanal.bon1) as 'bon1', SUM(pagosemanal.sueldo2) as 'sueldo2', SUM(pagosemanal.bon2) as 'bon2', empleados.tipoPago as 'tipo' FROM pagosemanal inner join empleados on pagosemanal.idempleado = empleados.idempleado  GROUP BY pagosemanal.nombre order by empleados.tipoPago, pagosemanal.nombre";
 
 
   if (!$result = $con->query($sql7)) {
